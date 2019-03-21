@@ -1,24 +1,22 @@
 import React from 'react'
 import { Button, Form, Label, Input }  from 'reactstrap';
-import './registration.css'
 
-const registration = (props) =>{
+const login = (props) =>
+{
     return(
         <div>
-        <h2>Register</h2>
+        <h2>Login</h2>
             <Form>
-                <Label for='name'>Name</Label>
-                <Input type='text' name='name' id='name' onChange = {props.changeHandler}/>
                 <Label for='email'>Email</Label>
                 <Input type='text' name='email' id='email' onChange = {props.changeHandler}/>
                 <Label for='password'>Password</Label>
                 <Input type='text' name='password' id='password'  onChange = {props.changeHandler}/>
                 <div className='submit--button'>
-                    <Button onClick={props.onclick}>Register</Button>
+                    <Button onClick={props.onclick}>Login</Button>
                 </div>
             </Form>
         </div>
     );
 }
 
-export default registration;
+export default login;
