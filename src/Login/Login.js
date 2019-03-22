@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import LoginView from './Login_view'
 import { Route, Redirect } from 'react-router'
 import ErrorMessages from '../authErrors/authErrors'
+import {LoggedIn} from '../isLoggedIn'
+import Navbar from '../Navigationbar/Navigationbar_view'
 import axios from 'axios'
 
 class login extends Component
@@ -15,8 +17,16 @@ class login extends Component
             isLoggedIn: false,
             token: '',
             errors: [],
-            uid: null,
-            expiry: null
+            uid: '',
+            expiry: '',
+            client: ''
+        }
+    }
+
+    componentDidMount(){
+        if(LoggedIn())
+        {
+            this.setState({isLoggedIn: true});
         }
     }
 
@@ -34,20 +44,20 @@ class login extends Component
         console.log('login handler called handler called');
         axios.post(`http://localhost:5000/auth/sign_in`, { email: email, password: password })
             .then(res => {
-                console.log(res.headers['access-token'])
                 this.setState({
                     isLoggedIn: true,
                     token: res.headers['access-token'],
                     uid: res.headers['uid'],
-                    expiry: res.headers['expiry']
+                    expiry: res.headers['expiry'],
+                    client: res.headers['client'],
                 },() => {
-                    localStorage.setItem('token', this.state.token);
+                    localStorage.setItem('access-token', this.state.token);
                     localStorage.setItem('uid', this.state.uid);
+                    localStorage.setItem('expiry', this.state.expiry);
+                    localStorage.setItem('client', this.state.client);
                 });
             })
             .catch(error => {
-                console.log(error)
-                debugger
                 this.setState({
                     errors: error.response.data.errors,
                 }, () => {
@@ -62,6 +72,10 @@ class login extends Component
     }
 
     render(){
+        if(this.state.isLoggedIn){
+            return <Redirect to='/post' />
+        }
+        
         let messages = null;
         messages = (
             <div>
@@ -73,12 +87,15 @@ class login extends Component
             </div>
         );
         return(
-            <div className='form--parent-div'>
+            <div>
+                <Navbar/>
+                <div className='form--parent-div'>
                 {messages}
                 <LoginView
                 changeHandler={(event)=> this.changeHandler(event)}
                 onclick = {() => this.loginHandler()}
                 />
+            </div>
             </div>
         );
 

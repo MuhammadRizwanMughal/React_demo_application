@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import RegistrationView from './registration_view'
 import ErrorMessages from '../authErrors/authErrors'
 import { Route, Redirect } from 'react-router'
+import Navbar from '../Navigationbar/Navigationbar_view'
+import {LoggedIn} from '../isLoggedIn'
 import axios from 'axios'
 class registration extends Component {
     constructor(props) {
@@ -55,14 +57,18 @@ class registration extends Component {
             </div>
         );
         return (
-            <div className='form--parent-div'>
-            {this.state.isCreated ? this.redirect() : null}
-                {messages}
-                <RegistrationView
-                    onclick={() => this.registrationHandler()}
-                    changeHandler={(event) => this.changeHandler(event)}
-                >
-                </RegistrationView>
+            <div>
+                <Navbar/>
+                <div className='form--parent-div'>
+                {LoggedIn() ? <Redirect to='/post' /> : null}
+                {this.state.isCreated ? this.redirect() : null}
+                    {messages}
+                    <RegistrationView
+                        onclick={() => this.registrationHandler()}
+                        changeHandler={(event) => this.changeHandler(event)}
+                    >
+                    </RegistrationView>
+                </div>
             </div>
         );
     }

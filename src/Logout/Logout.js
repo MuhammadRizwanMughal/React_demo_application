@@ -3,8 +3,7 @@ import {Route, Redirect} from 'react-router-dom'
 
 const logout = () =>
 {
-    localStorage.removeItem('uid');
-    localStorage.removeItem('token');
+    localStorage.clear();
     return(<Redirect to= '/login' /> );
 }
 
